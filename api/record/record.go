@@ -2,8 +2,8 @@
  * @Author: Monve
  * @Date: 2023-07-25 07:22:50
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 08:21:29
- * @FilePath: /web-service-gin/controllers/record/record.go
+ * @LastEditTime: 2023-07-25 12:20:02
+ * @FilePath: /web-service-gin/api/record/record.go
  */
 package record
 
@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"web-service-gin/utils/redis"
+	"web-service-gin/internal/pkg/redis"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,7 +38,7 @@ func getAccessCountInDateRange(startDate, endDate string) (map[string]map[string
 	dateRecord := make(map[string]map[string]string)
 	for date := startTime; date.Before(endTime.Add(24 * time.Hour)); date = date.Add(24 * time.Hour) {
 		key := fmt.Sprintf("access:%s", date.Format("2006-01-02"))
-		data, err := redis.Db.HGetAll(ctx, key).Result()
+		data, err := redis.Db.HGetAll(key).Result()
 		if err != nil {
 			return nil, err
 		}

@@ -2,8 +2,8 @@
  * @Author: Monve
  * @Date: 2023-07-25 03:00:01
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 10:23:02
- * @FilePath: /web-service-gin/utils/pgpool/pgpool.go
+ * @LastEditTime: 2023-07-25 12:17:19
+ * @FilePath: /web-service-gin/internal/pkg/pgpool/pgpool.go
  */
 package pgpool
 
@@ -11,7 +11,7 @@ import (
 	"database/sql"
 	"fmt"
 	"sync"
-	"web-service-gin/utils/env"
+	"web-service-gin/configs/env"
 
 	_ "github.com/lib/pq" // 导入PostgreSQL驱动，这里使用匿名导入
 )

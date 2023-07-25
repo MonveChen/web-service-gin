@@ -2,20 +2,19 @@
  * @Author: Monve
  * @Date: 2023-07-24 14:52:31
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 10:25:16
- * @FilePath: /web-service-gin/utils/redis/redis.go
+ * @LastEditTime: 2023-07-25 12:19:13
+ * @FilePath: /web-service-gin/internal/pkg/redis/redis.go
  */
 package redis
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"time"
-	"web-service-gin/utils/env"
+	"web-service-gin/configs/env"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redis"
 )
 
 var Db *redis.Client
@@ -29,7 +28,7 @@ func Init() {
 	})
 
 	// 检查是否可以连接到Redis服务器
-	_, err := Db.Ping(context.Background()).Result()
+	_, err := Db.Ping().Result()
 	if err != nil {
 		panic("无法连接到Redis服务器")
 	} else {
@@ -51,7 +50,7 @@ func CacheMiddleware(c *gin.Context) {
 	key := c.Request.URL.String()
 
 	// 尝试从缓存中获取数据
-	val, err := Db.Get(context.Background(), key).Result()
+	val, err := Db.Get(key).Result()
 	if err == nil {
 		c.Status(200)
 		c.Writer.Header().Add("Content-Type", "application/json; charset=utf-8")
@@ -71,6 +70,6 @@ func CacheMiddleware(c *gin.Context) {
 		response := w.body.String()
 
 		// 将数据保存到缓存中，设置适当的过期时间
-		Db.Set(context.Background(), key, response, time.Duration(60)*time.Second)
+		Db.Set(key, response, time.Duration(60)*time.Second)
 	}
 }

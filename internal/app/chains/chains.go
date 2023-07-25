@@ -2,14 +2,14 @@
  * @Author: Monve
  * @Date: 2023-07-24 18:38:25
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 09:30:06
+ * @LastEditTime: 2023-07-25 12:27:40
  * @FilePath: /web-service-gin/utils/chains/chains.go
  */
 package chains
 
 import (
 	"fmt"
-	token "web-service-gin/utils/chains/erc20"
+	token "web-service-gin/third_party/erc20"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"

@@ -2,8 +2,8 @@
  * @Author: Monve
  * @Date: 2023-07-24 11:45:43
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 10:19:44
- * @FilePath: /web-service-gin/controllers/user/user.go
+ * @LastEditTime: 2023-07-25 12:32:07
+ * @FilePath: /web-service-gin/api/user/user.go
  */
 package user
 
@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"web-service-gin/utils/auth"
-	"web-service-gin/utils/env"
+	"web-service-gin/configs/env"
+	"web-service-gin/internal/app/auth"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

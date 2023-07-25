@@ -2,8 +2,8 @@
  * @Author: Monve
  * @Date: 2023-07-24 15:25:19
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 06:55:07
- * @FilePath: /web-service-gin/controllers/token/token.go
+ * @LastEditTime: 2023-07-25 12:31:58
+ * @FilePath: /web-service-gin/api/token/token.go
  */
 package token
 
@@ -11,8 +11,8 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
-	"web-service-gin/utils/chains"
-	"web-service-gin/utils/pgpool"
+	"web-service-gin/internal/app/chains"
+	"web-service-gin/internal/pkg/pgpool"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"

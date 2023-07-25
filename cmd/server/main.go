@@ -2,8 +2,8 @@
  * @Author: Monve
  * @Date: 2023-07-24 10:35:58
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 09:33:40
- * @FilePath: /web-service-gin/main.go
+ * @LastEditTime: 2023-07-25 12:31:17
+ * @FilePath: /web-service-gin/cmd/server/main.go
  */
 package main
 
@@ -19,14 +19,13 @@ import (
 
 	swaggerfiles "github.com/swaggo/files"
 
+	"web-service-gin/api/record"
+	"web-service-gin/api/token"
+	"web-service-gin/api/user"
 	docs "web-service-gin/docs"
-
-	"web-service-gin/controllers/record"
-	"web-service-gin/controllers/token"
-	"web-service-gin/controllers/user"
-	"web-service-gin/utils/auth"
-	"web-service-gin/utils/pgpool"
-	"web-service-gin/utils/redis"
+	"web-service-gin/internal/app/auth"
+	"web-service-gin/internal/pkg/pgpool"
+	"web-service-gin/internal/pkg/redis"
 )
 
 func main() {

@@ -2,13 +2,12 @@
  * @Author: Monve
  * @Date: 2023-07-24 15:16:08
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 10:20:10
- * @FilePath: /web-service-gin/utils/auth/auth.go
+ * @LastEditTime: 2023-07-25 12:31:35
+ * @FilePath: /web-service-gin/internal/app/auth/auth.go
  */
 package auth
 
 import (
-	"context"
 	"fmt"
 	"math"
 	"net/http"
@@ -17,9 +16,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"web-service-gin/utils/env"
-	"web-service-gin/utils/limiter"
-	"web-service-gin/utils/redis"
+	"web-service-gin/configs/env"
+	"web-service-gin/internal/app/limiter"
+	"web-service-gin/internal/pkg/redis"
 
 	redis_o "github.com/go-redis/redis/v8"
 )
@@ -33,14 +32,12 @@ type CustomClaims struct {
 
 // 添加黑名单
 func AddBlack(token string, expirationTime time.Time) error {
-	ctx := context.Background()
-	return redis.Db.Set(ctx, token, "blacklisted", time.Until(expirationTime)).Err()
+	return redis.Db.Set(token, "blacklisted", time.Until(expirationTime)).Err()
 }
 
 // 判断是否在黑名单
 func IsBlacklisted(token string) bool {
-	ctx := context.Background()
-	val, err := redis.Db.Get(ctx, token).Result()
+	val, err := redis.Db.Get(token).Result()
 	if err == redis_o.Nil {
 		return false
 	} else if err != nil {
@@ -91,11 +88,11 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if claims.Role == "owner" {
 			//不限制,但记录
-			limit = limiter.NewLimiter(redis.Db, c.Request.URL.Path+"_"+claims.Username, int(math.MaxInt), time.Minute)
+			limit = limiter.NewLimiter(c.Request.URL.Path+"_"+claims.Username, int(math.MaxInt), time.Minute)
 		} else if claims.Role == "normal" {
-			limit = limiter.NewLimiter(redis.Db, c.Request.URL.Path+"_"+claims.Username, 30, time.Minute)
+			limit = limiter.NewLimiter(c.Request.URL.Path+"_"+claims.Username, 30, time.Minute)
 		} else {
-			limit = limiter.NewLimiter(redis.Db, c.Request.URL.Path+"_"+claims.Username, 5, time.Minute)
+			limit = limiter.NewLimiter(c.Request.URL.Path+"_"+claims.Username, 5, time.Minute)
 		}
 		if !limit.Allow() {
 			c.JSON(403, gin.H{"error": "Exceeded the limit, please try again later"})
@@ -154,12 +151,10 @@ func RoleMiddleware(roles []string) gin.HandlerFunc {
 	}
 }
 
-var ctx = context.Background()
-
 func recordAccess(visitorID string) {
 	today := time.Now().UTC().Format("2006-01-02")
 	key := fmt.Sprintf("access:%s", today)
-	redis.Db.HIncrBy(ctx, key, visitorID, 1)
+	redis.Db.HIncrBy(key, visitorID, 1)
 	// 设置过期时间，保留7天的统计数据
-	redis.Db.Expire(ctx, key, 7*24*time.Hour)
+	redis.Db.Expire(key, 7*24*time.Hour)
 }

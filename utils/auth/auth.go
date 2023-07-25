@@ -2,7 +2,7 @@
  * @Author: Monve
  * @Date: 2023-07-24 15:16:08
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 09:29:03
+ * @LastEditTime: 2023-07-25 10:20:10
  * @FilePath: /web-service-gin/utils/auth/auth.go
  */
 package auth
@@ -17,6 +17,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
+	"web-service-gin/utils/env"
 	"web-service-gin/utils/limiter"
 	"web-service-gin/utils/redis"
 
@@ -29,11 +30,6 @@ type CustomClaims struct {
 	Role     string `json:"role"`
 	jwt.StandardClaims
 }
-
-const (
-	secretKey      = "your_secret_key"
-	tokenExpiresIn = time.Hour * 2
-)
 
 // 添加黑名单
 func AddBlack(token string, expirationTime time.Time) error {
@@ -64,7 +60,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-			return []byte(secretKey), nil
+			return []byte(env.JwtSecretKey), nil
 		})
 
 		if err != nil {

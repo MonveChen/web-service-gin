@@ -15,3 +15,8 @@ CREATE UNIQUE INDEX idx_main ON public.contact_token (chainId, token);
 
 ```
 
+
+
+##### swagger
+
+http://localhost:8080/swagger/index.html

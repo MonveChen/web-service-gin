@@ -2,7 +2,7 @@
  * @Author: Monve
  * @Date: 2023-07-24 11:45:43
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 09:14:39
+ * @LastEditTime: 2023-07-25 10:19:44
  * @FilePath: /web-service-gin/controllers/user/user.go
  */
 package user
@@ -12,15 +12,10 @@ import (
 	"net/http"
 	"time"
 	"web-service-gin/utils/auth"
+	"web-service-gin/utils/env"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-)
-
-// Replace these with your own secret key and expiration time.
-const (
-	secretKey      = "your_secret_key"
-	tokenExpiresIn = time.Hour * 2
 )
 
 type LoginRequest struct {
@@ -68,12 +63,12 @@ func LoginHandler(c *gin.Context) {
 		Username: key,
 		Role:     role,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(tokenExpiresIn).Unix(),
+			ExpiresAt: time.Now().Add(env.JwtTokenExpiresIn).Unix(),
 		},
 	})
 
 	// Sign the token with the secret key to get the complete encoded token as a string.
-	tokenString, err := token.SignedString([]byte(secretKey))
+	tokenString, err := token.SignedString([]byte(env.JwtSecretKey))
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to generate token"})
 		return

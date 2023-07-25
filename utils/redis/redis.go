@@ -2,7 +2,7 @@
  * @Author: Monve
  * @Date: 2023-07-24 14:52:31
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 00:52:53
+ * @LastEditTime: 2023-07-25 10:25:16
  * @FilePath: /web-service-gin/utils/redis/redis.go
  */
 package redis
@@ -12,6 +12,7 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"web-service-gin/utils/env"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -22,7 +23,7 @@ var Db *redis.Client
 func Init() {
 	// 初始化Redis客户端
 	Db = redis.NewClient(&redis.Options{
-		Addr: "server1.dibiaozuitu.com:6379", // Redis服务器地址
+		Addr: env.RedisAddr, // Redis服务器地址
 		// Password: "",                             // Redis服务器密码
 		DB: 0, // 选择使用的数据库，默认为0
 	})

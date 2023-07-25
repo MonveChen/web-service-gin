@@ -1,0 +1,192 @@
+definitions:
+  token.AddRequest:
+    properties:
+      chainId:
+        example: eth
+        type: string
+      decimals:
+        example: 18
+        type: integer
+      symbol:
+        example: PLTC
+        type: string
+      token:
+        example: 0x429D83Bb0DCB8cdd5311e34680ADC8B12070a07f
+        type: string
+    type: object
+  token.DelRequest:
+    properties:
+      id:
+        example: "1"
+        type: string
+    type: object
+  token.EditRequest:
+    properties:
+      chainId:
+        example: eth
+        type: string
+      decimals:
+        example: 18
+        type: integer
+      id:
+        example: "1"
+        type: string
+      symbol:
+        example: PLTC
+        type: string
+      token:
+        example: 0x429D83Bb0DCB8cdd5311e34680ADC8B12070a07f
+        type: string
+    type: object
+  user.LoginRequest:
+    properties:
+      key:
+        example: dodo
+        type: string
+      secrert:
+        example: 721c6ff80a6d3e4ad4ffa52a04c60085
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /record/stats:
+    get:
+      consumes:
+      - application/json
+      description: 按（时间区间）查询访问情况
+      parameters:
+      - example: "2023-07-26"
+        in: query
+        name: end_date
+        type: string
+      - example: "2023-07-24"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: 查询访问情况
+      tags:
+      - Record
+  /token/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加token信息,仅owener角色用户可用
+      parameters:
+      - description: token info
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/token.AddRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: 添加token信息
+      tags:
+      - Token
+  /token/delete:
+    post:
+      consumes:
+      - application/json
+      description: 删除token信息,仅owener角色用户可用
+      parameters:
+      - description: id
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/token.DelRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: 删除token信息
+      tags:
+      - Token
+  /token/detail:
+    get:
+      consumes:
+      - application/json
+      description: 获取token详情
+      parameters:
+      - example: eth
+        in: query
+        name: chainId
+        type: string
+      - example: 0x429D83Bb0DCB8cdd5311e34680ADC8B12070a07f
+        in: query
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: 获取详情
+      tags:
+      - Token
+  /token/edit:
+    post:
+      consumes:
+      - application/json
+      description: 修改token信息
+      parameters:
+      - description: id
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/token.EditRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: 修改token信息，,仅owener角色用户可用
+      tags:
+      - Token
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 登陆获取token
+      parameters:
+      - description: Login information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: 登陆
+      tags:
+      - User
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: 登出账号（将token放入黑名单）
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: 登出
+      tags:
+      - User
+securityDefinitions:
+  BearerAuth:
+    description: 将login返回的token填在这里.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -2,7 +2,7 @@
  * @Author: Monve
  * @Date: 2023-07-24 15:25:19
  * @LastEditors: Monve
- * @LastEditTime: 2023-07-25 12:31:58
+ * @LastEditTime: 2023-07-25 15:10:31
  * @FilePath: /web-service-gin/api/token/token.go
  */
 package token
@@ -46,6 +46,7 @@ func DetialHandler(c *gin.Context) {
 	token := c.Query("token")
 	if chainId != "eth" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "only support eth chain"})
+		return
 	}
 
 	ethAddress := common.HexToAddress(token)
